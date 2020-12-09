@@ -13,6 +13,7 @@ from contextlib import contextmanager
 
 import impFile.wiki as wiki
 import impFile.weather as weatherData
+import impFile.wheaterGoogle as wheaterGoogleData
 
 LOCALE_LOCK = threading.Lock()
 
@@ -117,24 +118,24 @@ class WikipediaKnowledge(Frame):
 class wheater(Frame):
     def __init__(self, parent, *args, **kwargs):
         Frame.__init__(self, parent, bg='black')
-        self.forecast = weatherData.weatherInformation
-        self.temperature = weatherData.temperatureInformation
+        self.forecast = wheaterGoogleData.divCuaca
+        self.temperature = wheaterGoogleData.divTemperature
 
-        image = Image.open(f'{weatherData.getIconData(self.forecast)}')
+        image = Image.open(f'{wheaterGoogleData.getIconData(self.forecast)}')
         image = image.resize((100,100), Image.ANTIALIAS)
         image = image.convert('RGB')
         photo = ImageTk.PhotoImage(image)
         self.iconLabelWeatherInformation = Label(self,image= photo, relief =FLAT, bg='black', bd=0)
         self.iconLabelWeatherInformation.image = photo
-        self.iconLabelWeatherInformation.pack(side = LEFT, anchor = N, padx=20)
+        self.iconLabelWeatherInformation.pack(side =LEFT, anchor = N, padx = 20)
 
 
         self.forecastLabel = Label(self, text = self.forecast, font = ('Helvetica', medium_text_size), fg = 'white', bg='black')
-        self.forecastLabel.pack(side = TOP, anchor=N)
+        self.forecastLabel.pack(side =TOP, anchor = W)
 
 
         self.temperatureLabel = Label(self, text = self.temperature, font = ('helvetica', larget_text_size), fg = 'white', bg='black')
-        self.temperatureLabel.pack(side= LEFT, anchor = N)
+        self.temperatureLabel.pack(side=LEFT, anchor = N)
 
         image1 = Image.open('assets/Wind.png')
         image1 = image1.resize((20,20), Image.ANTIALIAS)
@@ -153,8 +154,8 @@ class wheater(Frame):
         self.getInformationWeatherForcast()
 
     def getInformationWeatherForcast(self):
-        informationForcast = weatherData.weatherInformation
-        informationTemperature = weatherData.temperatureInformation
+        informationForcast = wheaterGoogleData.divCuaca
+        informationTemperature = wheaterGoogleData.divTemperature
         if informationForcast != self.forecast:
             self.forecast = informationForcast
             self.forecastLabel.config(text = informationForcast)
