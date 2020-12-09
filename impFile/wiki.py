@@ -12,6 +12,7 @@ keyword = [
     "apple","google","programmer","polisi","tentara","BIN","BMW","Ferrari","GIGN","Kopassus","GIGN",
     "game","microsoft","windows","linux","android","symbian","mamalia","jam matahari","pasta gigi",
     "kriptografi","cuaca","gempa","tornado","longsor","bank","cinta","soekarno","bus","ponsel pintar",
+    "SAS","Hacker", "Nikola Tesla", "Albert Einstein"
 ]
 
 def Wikipedia(word):
