@@ -38,9 +38,9 @@ def setlocale(name):
 class Clock(Frame):
     def __init__(self, parent, *args, **kwargs):
         Frame.__init__(self, parent, bg = 'black')
-        
+
         self.time1 = ''
-        self.timeLabel = Label(self, font = ('Helvetica', xlarge_text_size), fg = 'white', bg = 'black')
+        self.timeLabel = Label(self, font = ('Helvetica', larget_text_size), fg = 'white', bg = 'black')
         #---------time label pack--------------
         self.timeLabel.pack(side = TOP, anchor = E)
         #--------------------------------------
@@ -56,7 +56,7 @@ class Clock(Frame):
         #-------date label-------------------
         self.dateLabel.pack(side = TOP, anchor = E)
         #------------------------------------
-        
+
         self.tick()
 
     def tick(self):
@@ -65,15 +65,15 @@ class Clock(Frame):
                 time2 = time.strftime('%H:%M %p') #12 hour time format
             else:
                 time2 = time.strftime('%H:%M:%S') #24 hour time format
-            
-            
+
+
             dayOfWeek2 = time.strftime('%A')
             date2 = time.strftime(dateFormat)
 
             if time2 != self.time1:
                 self.time1 = time2
                 self.timeLabel.config(text = time2)
-            
+
             if dayOfWeek2 != self.dayOfWeek1:
                 self.dayOfWeek1 = dayOfWeek2
                 self.dayOfWeekLabel.config(text = dayOfWeek2)
@@ -94,32 +94,24 @@ class WikipediaKnowledge(Frame):
         self.title = 'Knowledge today'
         self.titleLabel = Label(self, text = self.title, font = ('Helvetica', medium_text_size), fg = 'white', bg = 'black')
         self.titleLabel.pack(side = TOP, anchor = W)
-        
-        #self.contentData = wiki.Wikipedia(random.choice(wiki.keyword))
-        #self.contentLabel = Label(self, text = self.contentData, font = ('Helvetica', small_text_size), fg = 'white', bg = 'black', justify = LEFT,wraplength=900)
-        #self.contentLabel.pack(side = TOP, anchor = W)
 
-        self.contentContainer = Frame(self, bg = 'black')
-        self.contentContainer.pack(side = TOP)
+        self.contentData = wiki.Wikipedia(random.choice(wiki.keyword))
+        self.contentLabel = Label(self, text = self.contentData, font = ('Helvetica', small_text_size), fg = 'white', bg = 'black', justify = LEFT,wraplength=1000)
+        self.contentLabel.pack(side = TOP, anchor = W)
+
         self.getWikiData()
-        
-    def getWikiData(self):
-        try:
-            result = wiki.Wikipedia(random.choice(wiki.keyword))
-            contentWiki = contentWikipedia(self.contentContainer, result)
-            contentWiki.pack(side= TOP, anchor = W)
-        except Exception as err:
-            traceback.print_exc()
-            print(err)
 
-class contentWikipedia(Frame):
-    def __init__(self, parent, event_name = ""):
-        Frame.__init__(self, parent, bg = 'black')
-        self.eventName = event_name
-        self.eventNameLabel = Label(self, text = self.eventName, font = ('Helvetica', small_text_size), fg = 'white', bg ='black', justify=LEFT, wraplength= 1000)
-        self.eventNameLabel.pack(side = LEFT, anchor = N)
+    def getWikiData(self):
+        getNameEvent = wiki.Wikipedia(random.choice(wiki.keyword))
+        if getNameEvent != self.contentData:
+            self.eventName = getNameEvent
+            self.contentLabel.config(text= getNameEvent)
+
+        self.contentLabel.after(600000, self.getWikiData)
 
 #----------------------------wikipedia--------------------------------------------------------------------
+
+
 
 #---------------------------weather information-----------------------------------------------------------
 class wheater(Frame):
@@ -127,12 +119,51 @@ class wheater(Frame):
         Frame.__init__(self, parent, bg='black')
         self.forecast = weatherData.weatherInformation
         self.temperature = weatherData.temperatureInformation
-        
+
+        image = Image.open(f'{weatherData.getIconData(self.forecast)}')
+        image = image.resize((100,100), Image.ANTIALIAS)
+        image = image.convert('RGB')
+        photo = ImageTk.PhotoImage(image)
+        self.iconLabelWeatherInformation = Label(self,image= photo, relief =FLAT, bg='black', bd=0)
+        self.iconLabelWeatherInformation.image = photo
+        self.iconLabelWeatherInformation.pack(side = LEFT, anchor = N, padx=20)
+
+
         self.forecastLabel = Label(self, text = self.forecast, font = ('Helvetica', medium_text_size), fg = 'white', bg='black')
         self.forecastLabel.pack(side = TOP, anchor=N)
 
+
         self.temperatureLabel = Label(self, text = self.temperature, font = ('helvetica', larget_text_size), fg = 'white', bg='black')
         self.temperatureLabel.pack(side= LEFT, anchor = N)
+
+        image1 = Image.open('assets/Wind.png')
+        image1 = image1.resize((20,20), Image.ANTIALIAS)
+        image1 = image1.convert('RGB')
+        photo1 = ImageTk.PhotoImage(image1)
+        self.iconLabelWind = Label(self,image= photo1, relief =FLAT, bg='black', bd=0)
+        self.iconLabelWind.image1 = photo1
+        self.iconLabelWind.pack(side = LEFT, anchor = N)
+
+        self.windforecastLabel = Label(self, text=weatherData.windInformation, font = ('Helvetica', small_text_size), fg = 'white', bg='black')
+        self.windforecastLabel.pack(side=LEFT, anchor = N)
+
+
+
+
+        self.getInformationWeatherForcast()
+
+    def getInformationWeatherForcast(self):
+        informationForcast = weatherData.weatherInformation
+        informationTemperature = weatherData.temperatureInformation
+        if informationForcast != self.forecast:
+            self.forecast = informationForcast
+            self.forecastLabel.config(text = informationForcast)
+        if informationTemperature != self.temperature:
+            self.temperature = informationTemperature
+            self.temperatureLabel.config(text =informationTemperature)
+
+        self.temperatureLabel.after(600000, self.getInformationWeatherForcast)
+
 
 #---------------------------weather information-----------------------------------------------------------
 
@@ -148,32 +179,32 @@ class FullScreenWindow:
         self.topFrame.pack(side = TOP, fill = BOTH, expand = YES)
         self.bottomFrame.pack(side = TOP, fill = BOTH, expand = YES)
         self.state = False
-        self.tk.bind("<Return>") #fullscreen
-        self.tk.bind("<Escape>") #exit fullscreen
+        self.tk.bind("<Return>", self.toggle_fullscreen) #fullscreen
+        self.tk.bind("<Escape>", self.end_fullscreen) #exit fullscreen
         #-------------------------------------------------------------
 
-        
-        
+
+
         #-------------------------clock Frame---------------------------
         self.clock = Clock(self.topFrame)
-        self.clock.pack(side = RIGHT, anchor = N, padx = 100, pady = 60)
+        self.clock.pack(side = RIGHT, anchor = N, padx = 90, pady = 60)
         #-------------------------------------------------------------
-        
+
         #-----------------------wikipedia------------------------------------
         self.Wiki1 = WikipediaKnowledge(self.bottomFrame)
-        self.Wiki1.pack(side = LEFT, anchor = S, padx = 60, pady = 60) 
+        self.Wiki1.pack(side = LEFT, anchor = S, padx = 90, pady = 50)
         #-------------------------------------------------------------------
 
         #--------------------other stuff--------------------------------
         self.weather1 = wheater(self.topFrame)
-        self.weather1.pack(side = LEFT, anchor = N, padx =100, pady=60)
+        self.weather1.pack(side = LEFT, anchor = N, padx =90, pady=60)
 
         #---------------------------------------------------------------
 
 
 
     def toggle_fullscreen(self, event = None):
-        self.state = not self.state #toggling boolean   
+        self.state = not self.state #toggling boolean
         self.tk.attributes("-fullscreen", self.state)
         return "break"
 
