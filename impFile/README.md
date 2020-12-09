@@ -1,4 +1,5 @@
 # config files
+[wikipedia](wikipedia)
 
 # wikipedia
 [wiki](https://github.com/slowy07/modernMirror/blob/main/impFile/wiki.py) generate wikipedia search result
