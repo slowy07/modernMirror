@@ -11,6 +11,10 @@
 ```!bash
 git clone https://www.github.com/slowy07/modernMirror.git
 ```
+for requirements
+```bash
+sudo pip install -r requirements.txt
+```
 for wiki and scrapping weather
 ```
 pip install wikipedia
