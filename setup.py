@@ -29,3 +29,10 @@ setup(
     installRequires = packages,
     packages = find_packages()
 )
+
+
+
+#---------------
+# if some error on wikipedia
+# try install by command pip install wikipedia
+#---------------
