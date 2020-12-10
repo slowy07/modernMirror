@@ -3,6 +3,7 @@ import time
 import locale
 import threading
 import json
+import datetime
 import traceback
 import feedparser
 import random
@@ -22,7 +23,7 @@ ui_locale = ''
 dateFormat = "%b %d %Y"
 time_format = 24 #12 for set 12 hour time format
 xlarge_text_size = 94
-larget_text_size = 48
+large_text_size = 48
 medium_text_size = 28
 small_text_size = 14
 
@@ -41,7 +42,7 @@ class Clock(Frame):
         Frame.__init__(self, parent, bg = 'black')
 
         self.time1 = ''
-        self.timeLabel = Label(self, font = ('Helvetica', larget_text_size), fg = 'white', bg = 'black')
+        self.timeLabel = Label(self, font = ('Helvetica', large_text_size), fg = 'white', bg = 'black')
         #---------time label pack--------------
         self.timeLabel.pack(side = TOP, anchor = E)
         #--------------------------------------
@@ -85,6 +86,7 @@ class Clock(Frame):
 
             self.timeLabel.after(200, self.tick)
 #----------------------------clock--------------------------------------------------------------------
+
 
 
 #----------------------------wikipedia--------------------------------------------------------------------
@@ -134,7 +136,7 @@ class wheater(Frame):
         self.forecastLabel.pack(side =TOP, anchor = W)
 
 
-        self.temperatureLabel = Label(self, text = self.temperature, font = ('helvetica', larget_text_size), fg = 'white', bg='black')
+        self.temperatureLabel = Label(self, text = self.temperature, font = ('helvetica', large_text_size), fg = 'white', bg='black')
         self.temperatureLabel.pack(side=LEFT, anchor = N)
 
         image1 = Image.open('assets/Wind.png')
@@ -168,6 +170,29 @@ class wheater(Frame):
 
 #---------------------------weather information-----------------------------------------------------------
 
+#----------------------------say day----------------------------------------------------------------------
+class sayTodayInformation(Frame):
+    def __init__(self,parent, *args, **kwargs):
+        Frame.__init__(self, parent, bg = 'black')
+        timedelta = datetime.datetime.now()
+        self.getDateInformation = str(timedelta.strftime('%H'))
+        
+        self.sayAiLabel = Label(self, text = self.getDateInformation, font = ('Helvetica', small_text_size), fg = 'white', bg='black')
+        self.sayAiLabel.pack(side=TOP, anchor = S)
+        
+        self.getTimeInformation()
+
+
+
+    def getTimeInformation(self):
+        timeInformationResult = wheaterGoogleData.getTime(self.getDateInformation)
+        self.getDateInformation = timeInformationResult
+        self.sayAiLabel.config(text =timeInformationResult)
+
+        self.sayAiLabel.after(600000, self.getTimeInformation)
+
+#----------------------------say day----------------------------------------------------------------------
+
 
 
 class FullScreenWindow:
@@ -185,20 +210,24 @@ class FullScreenWindow:
         #-------------------------------------------------------------
 
 
+        #-------------------------ai say--------------------------------
+        self.ai = sayTodayInformation(self.bottomFrame)
+        self.ai.pack(side=TOP, anchor = S)
+        #---------------------------------------------------------------
 
         #-------------------------clock Frame---------------------------
         self.clock = Clock(self.topFrame)
-        self.clock.pack(side = RIGHT, anchor = N, padx = 90, pady = 60)
+        self.clock.pack(side = RIGHT, anchor = N, padx = 95, pady = 60)
         #-------------------------------------------------------------
 
         #-----------------------wikipedia------------------------------------
         self.Wiki1 = WikipediaKnowledge(self.bottomFrame)
-        self.Wiki1.pack(side = LEFT, anchor = S, padx = 90, pady = 50)
+        self.Wiki1.pack(side = LEFT, anchor = S, padx = 95, pady = 50)
         #-------------------------------------------------------------------
 
         #--------------------other stuff--------------------------------
         self.weather1 = wheater(self.topFrame)
-        self.weather1.pack(side = LEFT, anchor = N, padx =90, pady=60)
+        self.weather1.pack(side = LEFT, anchor = N, padx =95, pady=60)
 
         #---------------------------------------------------------------
 
