@@ -2,10 +2,8 @@ from tkinter import *
 import time
 import locale
 import threading
-import json
 import datetime
 import traceback
-import feedparser
 import random
 
 from PIL import Image, ImageTk
