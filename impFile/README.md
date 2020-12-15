@@ -28,3 +28,22 @@ import wikipedia
 wikipedia.set_lang("id")
 print(wikipedia.summary("google corporation", sentences = 2))
 ```
+
+## quotes
+installation
+```bash
+sudo pip install --upgrade wikiquote
+```
+usage
+```python
+import wikiquote
+print(wikiquote.quotes('Linus Torvalds'))
+```
+using ``random()`` for random quotes 
+```python
+import wikiquote
+import random
+personName = ['Mark Zuckerberg','Aristotle','Plato','Socrates']
+print(wikiquote.quotes(random.choice(personName)))
+```
+for more information about quotes here : [wikiquote](https://github.com/federicotdn/wikiquote)
