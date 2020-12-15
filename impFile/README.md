@@ -1,5 +1,6 @@
 # config files
 [wikipedia](https://github.com/slowy07/modernMirror/blob/main/impFile/README.md#wikipedia)
+[quotes](https://github.com/slowy07/modernMirror/tree/main/impFile#quotes)
 
 # wikipedia
 [wiki](https://github.com/slowy07/modernMirror/blob/main/impFile/wiki.py) generate wikipedia search result
