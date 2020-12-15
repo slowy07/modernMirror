@@ -15,7 +15,7 @@ for requirements
 ```bash
 sudo pip install -r requirements.txt
 ```
-for wiki and scrapping weather
+## for wiki and scrapping weather
 ```
 pip install wikipedia
 ```
