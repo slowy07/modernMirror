@@ -40,7 +40,7 @@ usage
 import wikiquote
 print(wikiquote.quotes('Linus Torvalds'))
 ```
-using ``random()`` for random quotes 
+using ``random()`` for random quotes from list of ``personName``
 ```python
 import wikiquote
 import random
